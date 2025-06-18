@@ -1,0 +1,20 @@
+#This is a generated file; do not edit.
+#Mon May 12 17:52:32 KST 2025
+org.eclipse.egit.doc=org.eclipse.egit.doc\n7.2.0.202503040940-r
+org.eclipse.epp.mpc.help.ui=org.eclipse.epp.mpc.help.ui\n1.12.0.v20250130-1529
+org.eclipse.epp.mpc.ui=org.eclipse.epp.mpc.ui\n1.12.0.v20250130-1529
+org.eclipse.help=org.eclipse.help\n3.10.400.v20240415-0528
+org.eclipse.help.base=org.eclipse.help.base\n4.5.0.v20250228-0140
+org.eclipse.jdt=org.eclipse.jdt\n3.19.800.v20250228-0140
+org.eclipse.jdt.doc.user=org.eclipse.jdt.doc.user\n3.15.2500.v20250224-1707
+org.eclipse.linuxtools.docker.docs=org.eclipse.linuxtools.docker.docs\n5.18.0.202503042117
+org.eclipse.m2e.core.ui=org.eclipse.m2e.core.ui\n2.4.0.20250224-0720
+org.eclipse.mylyn.wikitext.help.ui=org.eclipse.mylyn.wikitext.help.ui\n4.6.0.v20241229-1209
+org.eclipse.pde=org.eclipse.pde\n3.13.3000.v20250228-0140
+org.eclipse.pde.doc.user=org.eclipse.pde.doc.user\n3.17.0.v20241229-1130
+org.eclipse.platform=org.eclipse.platform\n4.35.0.v20250228-0140
+org.eclipse.platform.doc.user=org.eclipse.platform.doc.user\n4.35.0.v20250224-1707
+org.eclipse.ui.cheatsheets=org.eclipse.ui.cheatsheets\n3.8.500.v20240621-0541
+org.eclipse.ui.intro=org.eclipse.ui.intro\n3.7.500.v20241127-0919
+org.eclipse.ui.intro.universal=org.eclipse.ui.intro.universal\n3.5.400.v20240414-1916
+org.eclipse.wst.server.ui.doc.user=org.eclipse.wst.server.ui.doc.user\n1.1.600.v201901310132
