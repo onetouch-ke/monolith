@@ -1,6 +1,10 @@
 spring:
   datasource:
+<<<<<<< HEAD
     url: jdbc:mariadb://10.10.8.141:3306/user
+=======
+    url: jdbc:mariadb://10.10.121.153:3307/user
+>>>>>>> feature-lsh
     username: root
     password: "P@ssw0rd"
     driver-class-name: org.mariadb.jdbc.Driver
@@ -12,3 +16,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature-lsh

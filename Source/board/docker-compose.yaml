@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:10.11.7
+    container_name: mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: P@ssw0rd
+      MARIADB_DATABASE: user
+    ports:
+      - "3307:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - spring-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  spring-app:
+    image: my-spring-app
+    container_name: spring-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mariadb
+    networks:
+      - spring-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  mariadb_data:
+
+networks:
+  spring-net:
+
