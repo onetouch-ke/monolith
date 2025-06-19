@@ -1,0 +1,31 @@
+package com.example.user.controller;
+
+import com.example.user.entity.HelloEntity;
+import com.example.user.repository.HelloRepository;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HelloController {
+
+    private final HelloRepository helloRepository;
+
+    public HelloController(HelloRepository helloRepository) {
+        this.helloRepository = helloRepository;
+    }
+
+    @GetMapping("/db-check")
+    public String checkDb() {
+        HelloEntity entity = new HelloEntity();
+        entity.setMessage("DB 연결 정상");
+
+        // 저장
+        helloRepository.save(entity);
+
+        // 조회
+        long count = helloRepository.count();
+
+        return "DB 연결 성공! 현재 메시지 총 개수: " + count;
+    }
+    
+}

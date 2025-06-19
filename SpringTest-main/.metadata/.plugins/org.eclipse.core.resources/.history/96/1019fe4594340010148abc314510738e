@@ -1,0 +1,41 @@
+package com.example.user.controller;
+
+import com.example.user.entity.UserEntity;
+import com.example.user.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+    private final UserRepository userRepository;
+
+    @Autowired
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    // 전체 회원 목록 조회
+    @GetMapping
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    // ID(PK) 기준 단일 회원 조회
+    @GetMapping("/{id}")
+    public Optional<UserEntity> getUserById(@PathVariable Integer id) {
+        return userRepository.findById(id);
+    }
+
+    // 사용자 ID(user_id) 기준 단일 회원 조회 (선택사항)
+    @GetMapping("/userId/{userId}")
+    public Optional<UserEntity> getUserByUserId(@PathVariable String userId) {
+        return userRepository.findByUserId(userId);
+    }
+    
+    
+}
