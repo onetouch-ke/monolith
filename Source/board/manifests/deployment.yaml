@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: lsh5224/multicloud-springboot:20250620
+        image: hojun547/multicloud:20250620
         ports:
         - containerPort: 8080
 ---

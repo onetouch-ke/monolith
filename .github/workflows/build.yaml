@@ -60,6 +60,10 @@ jobs:
         git add Source/board/manifests/deployment.yaml version.txt
         git commit -m "Auto update image tag to ${{ env.TAG }}" || echo "No changes to commit"
 
+    - name: Push version.txt and deployment.yaml to main
+      run: |
+        git push origin HEAD:main
+    
     - name: Create or update auto-update branch
       run: |
         BRANCH_NAME=auto-update
