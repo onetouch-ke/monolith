@@ -3,8 +3,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      
-main
+      - main
 
 permissions:
   contents: write  # PAT을 쓰지만 명시해주면 안전
@@ -14,46 +13,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      
-name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      
-name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      
-name: Login to DockerHub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      
-name: Build and Push Docker Image
-      run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ github.sha }} Source/board
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ github.sha }}
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ github.sha }} Source/board
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ github.sha }}
 
-      
-name: Update Deployment manifest + Commit
-      run: |
-        sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ github.sha }}|" Source/board/manifests/deployment.yaml
-        git config --global user.email "actions@github.com"
-        git config --global user.name "GitHub Actions"
-        git checkout -b auto-update-${{ github.sha }}
-        git commit -am "Auto update image tag to ${{ github.sha }}"
-        git push https://${{/ secrets.GH_PAT }}@github.com/onetouch-ke/Multicloud.git HEAD:auto-update-${{ github.sha }}
+      - name: Update Deployment manifest + Commit
+        run: |
+          sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ github.sha }}|" Source/board/manifests/deployment.yaml
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git checkout -b auto-update-${{ github.sha }}
+          git commit -am "Auto update image tag to ${{ github.sha }}"
+          git push https://${{ secrets.GH_PAT }}@github.com/onetouch-ke/Multicloud.git HEAD:auto-update-${{ github.sha }}
 
-      
-name: Install GitHub CLI
-      run: sudo apt-get update && sudo apt-get install -y gh
+      - name: Install GitHub CLI
+        run: sudo apt-get update && sudo apt-get install -y gh
 
-      
-name: Create Pull Request
-      run: |
-        gh pr create --title "Auto update image tag to ${{ github.sha }}" --body "This PR updates the image tag for deployment." --base main --head auto-update-${{ github.sha }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-
-        
+      - name: Create Pull Request
+        run: |
+          gh pr create --title "Auto update image tag to ${{ github.sha }}" --body "This PR updates the image tag for deployment." --base main --head auto-update-${{ github.sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
