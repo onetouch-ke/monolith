@@ -44,7 +44,7 @@ jobs:
 
     - name: Login to DockerHub
       run: |
-        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
     - name: Build Docker image
       run: |
@@ -62,7 +62,7 @@ jobs:
 
     - name: Create or update auto-update branch
       run: |
-        BRANCH_NAME=auto-update-${{ env.TAG }}
+        BRANCH_NAME=auto-update
         git checkout -B $BRANCH_NAME
         git push origin $BRANCH_NAME --force
 
@@ -70,20 +70,10 @@ jobs:
       uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        branch: auto-update-${{ env.TAG }}
-        title: Auto update image tag to ${{ env.TAG }}
+        branch: auto-update
+        title: Auto update image tag
         body: |
           This PR was automatically created by GitHub Actions.
-          It updates the image tag to `${{ env.TAG }}`.
+          It updates the image tag.
         base: main
-        delete-branch: true
-
-
-
-
-
-
-
-
-
-
+        delete-branch: false
