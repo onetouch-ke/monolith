@@ -27,7 +27,7 @@ jobs:
 
       - name: Set build tag (시간 기반 tag 생성)
         id: set_tag
-        run: echo "TAG=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
+        run: echo "TAG=$(date +'%Y%m%d')" >> $GITHUB_ENV
 
       - name: Build and Push Docker Image
         run: |
