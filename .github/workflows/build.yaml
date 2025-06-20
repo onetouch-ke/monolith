@@ -48,15 +48,15 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t lsh5224/multicloud-springboot:${{ env.TAG }} Source/board
+        docker build -t hojun547/multicloud:${{ env.TAG }} Source/board
 
     - name: Push Docker image
       run: |
-        docker push lsh5224/multicloud-springboot:${{ env.TAG }}
+        docker push hojun547/multicloud:${{ env.TAG }}
 
     - name: Update deployment.yaml
       run: |
-        sed -i 's|image:.*|image: lsh5224/multicloud-springboot:'"${{ env.TAG }}"'|' Source/board/manifests/deployment.yaml
+        sed -i 's|image:.*|image: hojun547/multicloud:'"${{ env.TAG }}"'|' Source/board/manifests/deployment.yaml
         git add Source/board/manifests/deployment.yaml version.txt
         git commit -m "Auto update image tag to ${{ env.TAG }}" || echo "No changes to commit"
 
