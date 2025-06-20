@@ -55,7 +55,7 @@ jobs:
 
     - name: Update deployment.yaml
       run: |
-        sed -i "s|image:.*|image: lsh5224/multicloud-springboot:${{ env.TAG }}|" Source/board/manifests/deployment.yaml
+        sed -i 's|image:.*|image: lsh5224/multicloud-springboot:'"${{ env.TAG }}"'|' Source/board/manifests/deployment.yaml
         git add Source/board/manifests/deployment.yaml version.txt
         git commit -m "Auto update image tag to ${{ env.TAG }}" || echo "No changes to commit"
 
