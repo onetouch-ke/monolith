@@ -39,8 +39,7 @@ jobs:
         echo "TAG=$VERSION" >> $GITHUB_ENV
 
     - name: Show version
-      run: | 
-        echo "Build TAG: ${{ env.TAG }}"
+      run: echo "Build TAG: ${{ env.TAG }}"
 
     - name: Login to DockerHub
       run: |
@@ -54,31 +53,26 @@ jobs:
       run: |
         docker push hojun547/multicloud:${{ env.TAG }}
 
-    - name: Update deployment.yaml
+    - name: Update deployment.yaml and version.txt
       run: |
         sed -i 's|image:.*|image: hojun547/multicloud:'"${{ env.TAG }}"'|' Source/board/manifests/deployment.yaml
         git add Source/board/manifests/deployment.yaml version.txt
         git commit -m "Auto update image tag to ${{ env.TAG }}" || echo "No changes to commit"
 
-    - name: Push version.txt and deployment.yaml to main
+    - name: Push to CI/CD branch
       run: |
-        git push origin HEAD:main
-    
-    - name: Create or update auto-update branch
-      run: |
-        BRANCH_NAME=auto-update
+        BRANCH_NAME=CI/CD-branch
         git checkout -B $BRANCH_NAME
         git push origin $BRANCH_NAME --force
 
-    - name: Create pull request
+    - name: Create or update pull request
       uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        branch: auto-update
-        title: Auto update image tag
+        branch: CI/CD-branch
+        title: Auto update image tag to ${{ env.TAG }}
         body: |
           This PR was automatically created by GitHub Actions.
-          It updates the image tag.
+          It updates the image tag to `${{ env.TAG }}` and version.txt.
         base: main
         delete-branch: false
-## hello
