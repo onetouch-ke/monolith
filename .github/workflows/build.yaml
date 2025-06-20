@@ -24,7 +24,7 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ github.sha }} .
+        docker build -f Source/board/Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ github.sha }} .
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ github.sha }}
 
     - name: Update Deployment manifest
