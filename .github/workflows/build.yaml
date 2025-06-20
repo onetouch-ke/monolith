@@ -25,25 +25,29 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
+      - name: Set build tag (시간 기반 tag 생성)
+        id: set_tag
+        run: echo "TAG=$(date +'%Y%m%d')" >> $GITHUB_ENV
+
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ github.sha }} Source/board
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ github.sha }}
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ env.TAG }} Source/board
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ env.TAG }}
 
       - name: Update Deployment manifest + Commit
         run: |
-          sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ github.sha }}|" Source/board/manifests/deployment.yaml
+          sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/multicloud-springboot:${{ env.TAG }}|" Source/board/manifests/deployment.yaml
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-          git checkout -b auto-update-${{ github.sha }}
-          git commit -am "Auto update image tag to ${{ github.sha }}"
-          git push https://${{ secrets.GH_PAT }}@github.com/onetouch-ke/Multicloud.git HEAD:auto-update-${{ github.sha }}
+          git checkout -b auto-update-${{ env.TAG }}
+          git commit -am "Auto update image tag to ${{ env.TAG }}"
+          git push https://${{ secrets.GH_PAT }}@github.com/onetouch-ke/Multicloud.git HEAD:auto-update-${{ env.TAG }}
 
       - name: Install GitHub CLI
         run: sudo apt-get update && sudo apt-get install -y gh
 
       - name: Create Pull Request
         run: |
-          gh pr create --title "Auto update image tag to ${{ github.sha }}" --body "This PR updates the image tag for deployment." --base main --head auto-update-${{ github.sha }}
+          gh pr create --title "Auto update image tag to ${{ env.TAG }}" --body "This PR updates the image tag for deployment." --base main --head auto-update-${{ env.TAG }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}

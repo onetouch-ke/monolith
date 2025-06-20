@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: lsh5224/multicloud-springboot:9e177eacba53cd9d6ec3091acbcb382f2cdf1b6f
+        image: lsh5224/multicloud-springboot:20250620
         ports:
         - containerPort: 8080
 ---
@@ -32,6 +32,3 @@ spec:
   - port: 8080
     nodePort: 30080
 
-
-
-    
