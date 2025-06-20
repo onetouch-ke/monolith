@@ -42,17 +42,20 @@ jobs:
       run: echo "Build TAG: ${{ env.TAG }}"
 
     - name: Login to DockerHub
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
     - name: Build Docker image
-      run: docker build -t lsh5224/multicloud-springboot:${{ env.TAG }} Source/board
+      run: |
+        docker build -t lsh5224/multicloud-springboot:${{ env.TAG }} Source/board
 
     - name: Push Docker image
-      run: docker push lsh5224/multicloud-springboot:${{ env.TAG }}
+      run: |
+        docker push lsh5224/multicloud-springboot:${{ env.TAG }}
 
     - name: Update deployment.yaml
       run: |
-        sed -i 's|image:.*|image: lsh5224/multicloud-springboot:${{ env.TAG }}|' Source/board/manifests/deployment.yaml
+        sed -i "s|image:.*|image: lsh5224/multicloud-springboot:${{ env.TAG }}|" Source/board/manifests/deployment.yaml
         git add Source/board/manifests/deployment.yaml version.txt
         git commit -m "Auto update image tag to ${{ env.TAG }}" || echo "No changes to commit"
 
@@ -67,9 +70,11 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         branch: auto-update-${{ env.TAG }}
-        title: "Auto update image tag to ${{ env.TAG }}"
+        title: Auto update image tag to ${{ env.TAG }}
         body: |
           This PR was automatically created by GitHub Actions.
           It updates the image tag to `${{ env.TAG }}`.
         base: main
         delete-branch: true
+
+
