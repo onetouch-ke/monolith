@@ -14,37 +14,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout main
-      uses: actions/checkout@v4
-      with:
-        persist-credentials: true
-        fetch-depth: 0  # PR 히스토리 생성용
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
 
-    - name: Set up Git
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-    - name: Update image tag
-      run: |
-        sed -i "s|image:.*|image: ***/multicloud-springboot:${{ github.run_number }}|" Source/board/manifests/deployment.yaml
-        git add Source/board/manifests/deployment.yaml
-        git commit -m "Auto update image tag to ${{ github.run_number }}" || echo "No changes to commit"
+      - name: Set build tag (한국 시간 시분초)
+        id: set_tag
+        run: |
+          echo "TAG=$(TZ=Asia/Seoul date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
 
-    - name: Create or update auto-update branch
-      run: |
-        BRANCH_NAME=auto-update
-        git checkout -B $BRANCH_NAME
-        git push origin $BRANCH_NAME --force
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t lsh5224/multicloud-springboot:${{ env.TAG }} Source/board
+          docker push lsh5224/multicloud-springboot:${{ env.TAG }}
 
-    - name: Create pull request
-      uses: peter-evans/create-pull-request@v5
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        branch: auto-update
-        title: "Auto update image tag to ${{ github.run_number }}"
-        body: |
-          This PR was automatically created by GitHub Actions.
-          It updates the image tag to `${{ github.run_number }}`.
-        base: main
-        delete-branch: true  # PR merge 시 auto-update 브랜치 자동 삭제
+      - name: Update image tag in deployment.yaml
+        run: |
+          sed -i "s|image:.*|image: lsh5224/multicloud-springboot:${{ env.TAG }}|" Source/board/manifests/deployment.yaml
+          git add Source/board/manifests/deployment.yaml
+          git commit -m "Auto update image tag to ${{ env.TAG }}" || echo "No changes to commit"
+
+      - name: Create or update auto-update branch
+        run: |
+          BRANCH_NAME=auto-update-${{ env.TAG }}
+          git checkout -B $BRANCH_NAME
+          git push origin $BRANCH_NAME --force
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: auto-update-${{ env.TAG }}
+          title: "Auto update image tag to ${{ env.TAG }}"
+          body: |
+            This PR was automatically created by GitHub Actions.
+            It updates the image tag to `${{ env.TAG }}`.
+          base: main
+          delete-branch: true
