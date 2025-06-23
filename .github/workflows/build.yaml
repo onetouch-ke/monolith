@@ -1,9 +1,6 @@
 name: Auto Build and Update Image Tag
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     types: [closed]
     branches:
