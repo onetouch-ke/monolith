@@ -29,29 +29,11 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
 
-    - name: Fetch latest main branch for version.txt
+    - name: Set build tag (GitHub Actions 빌드 번호)
       run: |
-        git fetch origin main
-        git checkout main -- version.txt || echo "version.txt does not exist yet"
+        echo "TAG=${{ github.run_number }}" >> $GITHUB_ENV
 
-    - name: Set build tag (누적 버전)
-      id: set_tag
-      run: |
-        VERSION_FILE=version.txt
-        if [ -f "$VERSION_FILE" ]; then
-          VERSION=$(cat $VERSION_FILE)
-          VERSION=$((VERSION + 1))
-        else
-          VERSION=1
-        fi
-        echo $VERSION > $VERSION_FILE
-        echo "TAG=$VERSION" >> $GITHUB_ENV
-
-    - name: Debug check version.txt content
-      run: |
-        cat version.txt
-
-    - name: Show version
+    - name: Show build tag
       run: |
         echo "Build TAG: ${{ env.TAG }}"
 
@@ -67,10 +49,10 @@ jobs:
       run: |
         docker push hojun547/multicloud:${{ env.TAG }}
 
-    - name: Update deployment.yaml and version.txt
+    - name: Update deployment.yaml
       run: |
         sed -i 's|image:.*|image: hojun547/multicloud:'"${{ env.TAG }}"'|' Source/board/manifests/deployment.yaml
-        git add Source/board/manifests/deployment.yaml version.txt
+        git add Source/board/manifests/deployment.yaml
         git commit -m "Auto update image tag to ${{ env.TAG }}" || echo "No changes to commit"
 
     - name: Push to CI/CD-branch
@@ -87,6 +69,6 @@ jobs:
         title: Auto update image tag to ${{ env.TAG }}
         body: |
           This PR was automatically created by GitHub Actions.
-          It updates the image tag to `${{ env.TAG }}` and version.txt.
+          It updates the image tag to `${{ env.TAG }}` in deployment.yaml.
         base: main
         delete-branch: false
