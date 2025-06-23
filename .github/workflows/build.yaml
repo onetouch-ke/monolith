@@ -29,6 +29,11 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
 
+    - name: Fetch latest main branch for version.txt
+      run: |
+        git fetch origin main
+        git checkout main -- version.txt || echo "version.txt does not exist yet"
+
     - name: Set build tag (누적 버전)
       id: set_tag
       run: |
@@ -64,7 +69,7 @@ jobs:
         git add Source/board/manifests/deployment.yaml version.txt
         git commit -m "Auto update image tag to ${{ env.TAG }}" || echo "No changes to commit"
 
-    - name: Push to CI/CD branch
+    - name: Push to CI/CD-branch
       run: |
         BRANCH_NAME=CI-CD-branch
         git checkout -B $BRANCH_NAME
