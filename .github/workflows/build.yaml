@@ -47,6 +47,10 @@ jobs:
         echo $VERSION > $VERSION_FILE
         echo "TAG=$VERSION" >> $GITHUB_ENV
 
+    - name: Debug: check version.txt content
+      run: |
+        cat version.txt
+
     - name: Show version
       run: |
         echo "Build TAG: ${{ env.TAG }}"
