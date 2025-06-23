@@ -3,7 +3,11 @@ name: Auto Build and Update Image Tag
 on:
   push:
     branches:
-      - main   
+      - main
+  pull_request:
+    types: [closed]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -39,8 +43,7 @@ jobs:
         echo "TAG=$VERSION" >> $GITHUB_ENV
 
     - name: Show version
-      run: |
-        echo "Build TAG: ${{ env.TAG }}"
+      run: echo "Build TAG: ${{ env.TAG }}"
 
     - name: Login to DockerHub
       run: |
@@ -62,7 +65,7 @@ jobs:
 
     - name: Push to CI/CD branch
       run: |
-        BRANCH_NAME=CI/CD-branch
+        BRANCH_NAME=CI-CD-branch
         git checkout -B $BRANCH_NAME
         git push origin $BRANCH_NAME --force
 
@@ -70,14 +73,10 @@ jobs:
       uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        branch: CI/CD-branch
+        branch: CI-CD-branch
         title: Auto update image tag to ${{ env.TAG }}
         body: |
           This PR was automatically created by GitHub Actions.
           It updates the image tag to `${{ env.TAG }}` and version.txt.
         base: main
         delete-branch: false
-        
-
-
-
