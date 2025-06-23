@@ -43,7 +43,8 @@ jobs:
         echo "TAG=$VERSION" >> $GITHUB_ENV
 
     - name: Show version
-      run: echo "Build TAG: ${{ env.TAG }}"
+      run: |
+        echo "Build TAG: ${{ env.TAG }}"
 
     - name: Login to DockerHub
       run: |
