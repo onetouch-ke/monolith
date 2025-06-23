@@ -71,7 +71,7 @@ jobs:
 
     - name: Push to CI/CD-branch
       run: |
-        BRANCH_NAME=CI-CD-branch
+        BRANCH_NAME=CI/CD-branch
         git checkout -B $BRANCH_NAME
         git push origin $BRANCH_NAME --force
 
@@ -79,7 +79,7 @@ jobs:
       uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        branch: CI-CD-branch
+        branch: CI/CD-branch
         title: Auto update image tag to ${{ env.TAG }}
         body: |
           This PR was automatically created by GitHub Actions.
