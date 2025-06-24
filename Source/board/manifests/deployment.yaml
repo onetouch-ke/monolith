@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: hojun547/multicloud:66
+        image: hojun547/multicloud:67
         ports:
         - containerPort: 8080
 ---
