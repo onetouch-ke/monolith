@@ -1,0 +1,16 @@
+springboot:
+  image:
+    repository: hojun547/multicloud
+    tag: latest
+  port: 8080
+  datasource:
+    url: jdbc:mariadb://mariadb-service:3306/user
+    username: root
+    password: P@ssw0rd
+
+mariadb:
+  image: mariadb:10.6
+  rootPassword: P@ssw0rd
+  database: user
+  port: 3306
+

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: springboot-app
+  template:
+    metadata:
+      labels:
+        app: springboot-app
+    spec:
+      containers:
+        - name: springboot-app
+          image: {{ .Values.springboot.image.repository }}:{{ .Values.springboot.image.tag }}
+          ports:
+            - containerPort: {{ .Values.springboot.port }}
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: {{ .Values.springboot.datasource.url }}
+            - name: SPRING_DATASOURCE_USERNAME
+              value: {{ .Values.springboot.datasource.username }}
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: {{ .Values.springboot.datasource.password }}

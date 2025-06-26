@@ -1,0 +1,6 @@
+apiVersion: v2
+name: mychart
+description: A sample Helm chart for Spring Boot + MariaDB
+version: 0.1.0
+appVersion: "1.0"
+
