@@ -1,7 +1,6 @@
 springboot:
   image:
-    repository: hojun547/multicloud
-    tag: '71'
+    repository: hojun547/multicloud:
   port: 8080
   datasource:
     url: jdbc:mariadb://mariadb-service:3306/user
