@@ -13,5 +13,3 @@ mariadb:
   rootPassword: P@ssw0rd
   database: user
   port: 3306
-
-  
