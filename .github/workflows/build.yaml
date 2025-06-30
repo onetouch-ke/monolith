@@ -26,31 +26,47 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
 
-    - name: Set build tag (GitHub Actions 빌드 번호)
-      run: |
-        echo "TAG=${{ github.run_number }}" >> $GITHUB_ENV
+    - name: Set build tag
+      run: echo "TAG=${{ github.run_number }}" >> $GITHUB_ENV
 
-    - name: Show build tag
-      run: |
-        echo "Build TAG: ${{ env.TAG }}"
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
 
-    - name: Login to DockerHub
-      run: |
-        echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build Docker image
-      run: |
-        docker build -t hojun547/multicloud:${{ env.TAG }} Source/board
+    # 백엔드 이미지 빌드 및 푸시
+    - name: Set backend ECR image
+      run: echo "BACKEND_IMAGE=${{ steps.login-ecr.outputs.registry }}/monolith-backend:${{ env.TAG }}" >> $GITHUB_ENV
 
-    - name: Push Docker image
-      run: |
-        docker push hojun547/multicloud:${{ env.TAG }}
+    - name: Build backend Docker image
+      run: docker build -t $BACKEND_IMAGE backend
 
-    - name: Update deployment.yaml
+    - name: Push backend Docker image
+      run: docker push $BACKEND_IMAGE
+
+    # 프론트엔드 이미지 빌드 및 푸시
+    - name: Set frontend ECR image
+      run: echo "FRONTEND_IMAGE=${{ steps.login-ecr.outputs.registry }}/monolith-frontend:${{ env.TAG }}" >> $GITHUB_ENV
+
+    - name: Build frontend Docker image
+      run: docker build -t $FRONTEND_IMAGE frontend
+
+    - name: Push frontend Docker image
+      run: docker push $FRONTEND_IMAGE
+
+    # Helm 템플릿 갱신
+    - name: Update image tags in Helm templates
       run: |
-        sed -i 's|image:.*|image: hojun547/multicloud:'"${{ env.TAG }}"'|' Source/board/manifests/deployment.yaml
-        git add Source/board/manifests/deployment.yaml
-        git commit -m "Auto update image tag to ${{ env.TAG }}" || echo "No changes to commit"
+        sed -i "s|image:.*monolith-backend.*|image: $BACKEND_IMAGE|" mychart/templates/springboot-deployment.yaml
+        sed -i "s|image:.*monolith-frontend.*|image: $FRONTEND_IMAGE|" mychart/templates/frontend-deployment.yaml
+        git add mychart/templates/*.yaml
+        git commit -m "Auto update image tags to ${{ env.TAG }}" || echo "No changes to commit"
 
     - name: Push to CI/CD-branch
       run: |
@@ -63,9 +79,9 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         branch: CI/CD-branch
-        title: Auto update image tag to ${{ env.TAG }}
+        title: Auto update image tags to ${{ env.TAG }}
         body: |
           This PR was automatically created by GitHub Actions.
-          It updates the image tag to `${{ env.TAG }}` in deployment.yaml.
+          It updates backend and frontend image tags to `${{ env.TAG }}`.
         base: main
         delete-branch: false
