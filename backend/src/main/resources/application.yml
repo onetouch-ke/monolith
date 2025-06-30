@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mariadb://10.10.8.111:3306/mydb
+    username: root
+    password: P@ssw0rd
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
