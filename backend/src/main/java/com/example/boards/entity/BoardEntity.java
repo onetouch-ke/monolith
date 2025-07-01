@@ -1,5 +1,6 @@
 package com.example.boards.entity;
 
+import com.example.users.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,4 +22,8 @@ public class BoardEntity {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = false)
+    private UserEntity author;
 }

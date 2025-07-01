@@ -1,53 +1,68 @@
 package com.example.boards.controller;
 
+import com.example.boards.dto.BoardReqDto;
+import com.example.boards.dto.BoardResDto;
+import com.example.boards.entity.BoardEntity;
+import com.example.boards.service.BoardService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/board")
+@RequestMapping("/boards")
 public class BoardController {
 
-    // 게시글 목록 저장용 임시 리스트 (DB 대용)
-    private final Map<Long, String> boardDB = new HashMap<>();
-    private long idCounter = 1;
+    private final BoardService boardService;
 
-    // 1. 게시판 전체 조회 (GET /board)
+    public BoardController(BoardService boardService) {
+        this.boardService = boardService;
+    }
+
+    // 전체 게시글 조회
     @GetMapping
-    public List<String> getAllPosts() {
-        return new ArrayList<>(boardDB.values());
-    }
+public ResponseEntity<List<BoardResDto>> getAllBoards() {
+    List<BoardEntity> boards = boardService.getAllBoards();
+    List<BoardResDto> responses = boards.stream()
+        .map(board -> BoardResDto.builder()
+            .id(board.getId())
+            .title(board.getTitle())
+            .content(board.getContent())
+            .authorUsername(board.getAuthor().getUsername())
+            .build())
+        .toList();
+    return ResponseEntity.ok(responses);
+}
 
-    // 2. 게시글 단일 조회 (GET /board/{id})
+
+    // 단일 게시글 조회
     @GetMapping("/{id}")
-    public String getPost(@PathVariable Long id) {
-        return boardDB.getOrDefault(id, "게시글이 존재하지 않습니다.");
-    }
+public ResponseEntity<BoardResDto> getBoard(@PathVariable Long id) {
+    BoardEntity board = boardService.getBoardById(id);
+    BoardResDto response = BoardResDto.builder()
+        .id(board.getId())
+        .title(board.getTitle())
+        .content(board.getContent())
+        .authorUsername(board.getAuthor().getUsername())
+        .build();
+    return ResponseEntity.ok(response);
+}
 
-    // 3. 게시글 작성 (POST /board)
+    // 게시글 작성
     @PostMapping
-    public String createPost(@RequestBody String content) {
-        boardDB.put(idCounter, content);
-        return "게시글 등록 완료. ID: " + (idCounter++);
+    public ResponseEntity<BoardEntity> createBoard(@RequestBody BoardReqDto requestDto) {
+        return ResponseEntity.ok(boardService.createBoard(requestDto));
     }
 
-    // 4. 게시글 삭제 (DELETE /board/{id})
-    @DeleteMapping("/{id}")
-    public String deletePost(@PathVariable Long id) {
-        if (boardDB.remove(id) != null) {
-            return "게시글 삭제 완료.";
-        } else {
-            return "게시글이 존재하지 않습니다.";
-        }
-    }
-
-    // 5. 게시글 수정 (PUT /board/{id})
+    // 게시글 수정
     @PutMapping("/{id}")
-    public String updatePost(@PathVariable Long id, @RequestBody String newContent) {
-        if (boardDB.containsKey(id)) {
-            boardDB.put(id, newContent);
-            return "게시글 수정 완료.";
-        } else {
-            return "게시글이 존재하지 않습니다.";
-        }
+    public ResponseEntity<BoardEntity> updateBoard(@PathVariable Long id, @RequestBody BoardReqDto requestDto) {
+        return ResponseEntity.ok(boardService.updateBoard(id, requestDto));
+    }
+
+    // 게시글 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<BoardEntity> deleteBoard(@PathVariable Long id) {
+        return ResponseEntity.ok(boardService.deleteBoard(id));
     }
 }
