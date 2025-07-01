@@ -33,17 +33,18 @@ public class BoardService {
 
     // 게시글 작성
     public BoardEntity createBoard(BoardReqDto dto) {
-        UserEntity author = userRepository.findById(dto.getAuthorId())
-                .orElseThrow(() -> new RuntimeException("작성자를 찾을 수 없습니다."));
+    UserEntity author = userRepository.findByUserId(dto.getUserId())
+        .orElseThrow(() -> new RuntimeException("작성자를 찾을 수 없습니다: " + dto.getUserId()));
 
-        BoardEntity board = BoardEntity.builder()
-                .title(dto.getTitle())
-                .content(dto.getContent())
-                .author(author)
-                .build();
+    BoardEntity board = BoardEntity.builder()
+            .title(dto.getTitle())
+            .content(dto.getContent())
+            .author(author)
+            .build();
 
-        return boardRepository.save(board);
-    }
+    return boardRepository.save(board);
+}
+
 
     // 게시글 수정
     public BoardEntity updateBoard(Long id, BoardReqDto dto) {

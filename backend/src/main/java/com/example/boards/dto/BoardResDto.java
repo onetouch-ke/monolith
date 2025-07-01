@@ -1,11 +1,13 @@
 package com.example.boards.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
-public class BoardReqDto {
+@Getter @Setter @Builder
+public class BoardResDto {
+    private Long id;
     private String title;
     private String content;
-    private String userId; 
+    private String authorUsername;
 }

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import './BoardsDetail.css';
+import Layout from '../users/Layout';
 
 function BoardDetail() {
   const { id } = useParams();
@@ -16,20 +18,21 @@ function BoardDetail() {
   if (!board) return <div>로딩 중...</div>;
 
   return (
-    <div>
-      <h2>{board.title}</h2>
-      <p>{board.content}</p>
-      <Link to={`/boards/edit/${board.id}`}>수정</Link>
-      <button onClick={() => {
-        fetch(`/boards/${board.id}`, { method: 'DELETE' })
-          .then(() => navigate('/boards'))
-          .catch(err => console.error('삭제 실패:', err));
-      }}>
-        삭제
-      </button>
-      <br />
-      <Link to="/boards">목록으로</Link>
-    </div>
+    <Layout>
+        <div className="board-detail-container">
+        <h2>{board.title}</h2>
+        <p>{board.content}</p>
+        <button onClick={() => {
+            fetch(`/boards/${board.id}`, { method: 'DELETE' })
+            .then(() => navigate('/boards'))
+            .catch(err => console.error('삭제 실패:', err));
+            }}>
+            삭제
+        </button>
+        <br />
+        <Link to="/boards">목록으로</Link>
+        </div>
+    </Layout>
   );
 }
 
