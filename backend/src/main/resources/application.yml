@@ -3,8 +3,8 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mariadb://mariadb.default.svc.cluster.local:3306/mydb
-    # url: jdbc:mariadb://10.10.8.111:3306/mydb #개발용 로컬 DB(EKS올라갈 떄 변경)
+    # url: jdbc:mariadb://mariadb.default.svc.cluster.local:3306/mydb
+    url: jdbc:mariadb://10.10.8.111:3306/mydb #개발용 로컬 DB(EKS올라갈 떄 변경)
     username: root
     password: P@ssw0rd
   jpa:

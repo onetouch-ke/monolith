@@ -1,7 +1,10 @@
 package com.example.boards.service;
 
+import com.example.boards.dto.BoardReqDto;
 import com.example.boards.entity.BoardEntity;
 import com.example.boards.repository.BoardRepository;
+import com.example.users.entity.UserEntity;
+import com.example.users.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +13,11 @@ import java.util.List;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
-    public BoardService(BoardRepository boardRepository) {
+    public BoardService(BoardRepository boardRepository, UserRepository userRepository) {
         this.boardRepository = boardRepository;
+        this.userRepository = userRepository;
     }
 
     // 전체 게시글 조회
@@ -27,17 +32,26 @@ public class BoardService {
     }
 
     // 게시글 작성
-    public BoardEntity createBoard(BoardEntity board) {
+    public BoardEntity createBoard(BoardReqDto dto) {
+        UserEntity author = userRepository.findById(dto.getAuthorId())
+                .orElseThrow(() -> new RuntimeException("작성자를 찾을 수 없습니다."));
+
+        BoardEntity board = BoardEntity.builder()
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .author(author)
+                .build();
+
         return boardRepository.save(board);
     }
 
     // 게시글 수정
-    public BoardEntity updateBoard(Long id, BoardEntity updatedBoard) {
+    public BoardEntity updateBoard(Long id, BoardReqDto dto) {
         BoardEntity board = boardRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
-        board.setTitle(updatedBoard.getTitle());
-        board.setContent(updatedBoard.getContent());
+        board.setTitle(dto.getTitle());
+        board.setContent(dto.getContent());
 
         return boardRepository.save(board);
     }
