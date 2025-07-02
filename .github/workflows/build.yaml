@@ -65,7 +65,7 @@ jobs:
       run: echo "MARIADB_IMAGE=${{ steps.login-ecr.outputs.registry }}/monolith-mariadb:${{ env.TAG }}" >> $GITHUB_ENV
 
     - name: Build mariadb Docker image
-      run: docker build -t $MARIADB_IMAGE -f DB/Dockerfile mariadb
+      run: docker build -t $MARIADB_IMAGE -f DB/Dockerfile DB
 
     - name: Push mariadb Docker image
       run: docker push $MARIADB_IMAGE
