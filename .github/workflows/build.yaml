@@ -78,9 +78,9 @@ jobs:
         git add mychart/templates/*.yaml
         git commit -m "Auto update image tags to ${{ env.TAG }}" || echo "No changes to commit"
 
-    - name: Push to CI/CD-branch
+    - name: Push to CI/CD
       run: |
-        BRANCH_NAME=CI/CD-branch
+        BRANCH_NAME=CI/CD
         git checkout -B $BRANCH_NAME
         git push origin $BRANCH_NAME --force
 

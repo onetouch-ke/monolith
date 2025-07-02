@@ -1,17 +1,19 @@
-springboot:
-  image:
-    repository: hojun547/multicloud
-    tag: '79'
+frontend:
+  image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-frontend
+  tag: 18
+  port: 80
+
+backend:
+  image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-backend
+  tag: 18
   port: 8080
-  datasource:
-    url: jdbc:mariadb://mariadb-service:3306/user
-    username: root
-    password: P@ssw0rd
 
 mariadb:
-  image: mariadb:10.6
-  rootPassword: P@ssw0rd
-  database: user
+  image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-mariadb
+  tag: 18
   port: 3306
+  rootPassword: P@ssw0rd
 
-
+ingress:
+  enabled: true
+  className: alb
