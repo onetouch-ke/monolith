@@ -45,7 +45,7 @@ jobs:
       run: echo "BACKEND_IMAGE=${{ steps.login-ecr.outputs.registry }}/monolith-backend:${{ env.TAG }}" >> $GITHUB_ENV
 
     - name: Build backend Docker image
-      run: docker build -t $BACKEND_IMAGE -f backend/Dockerfile .
+      run: docker build -t $BACKEND_IMAGE -f backend/Dockerfile backend
 
     - name: Push backend Docker image
       run: docker push $BACKEND_IMAGE
@@ -55,7 +55,7 @@ jobs:
       run: echo "FRONTEND_IMAGE=${{ steps.login-ecr.outputs.registry }}/monolith-frontend:${{ env.TAG }}" >> $GITHUB_ENV
 
     - name: Build frontend Docker image
-      run: docker build -t $FRONTEND_IMAGE -f frontend/Dockerfile .
+      run: docker build -t $FRONTEND_IMAGE -f frontend/Dockerfile frontend
 
     - name: Push frontend Docker image
       run: docker push $FRONTEND_IMAGE
@@ -65,7 +65,7 @@ jobs:
       run: echo "MARIADB_IMAGE=${{ steps.login-ecr.outputs.registry }}/monolith-mariadb:${{ env.TAG }}" >> $GITHUB_ENV
 
     - name: Build mariadb Docker image
-      run: docker build -t $MARIADB_IMAGE -f mariadb/Dockerfile .
+      run: docker build -t $MARIADB_IMAGE -f DB/Dockerfile mariadb
 
     - name: Push mariadb Docker image
       run: docker push $MARIADB_IMAGE
