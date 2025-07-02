@@ -1,13 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mariadb-service
+  name: {{ .Release.Name }}-mariadb
 spec:
   selector:
     app: mariadb
   ports:
-    - protocol: TCP
-      port: {{ .Values.mariadb.port }}
+    - port: {{ .Values.mariadb.port }}
       targetPort: {{ .Values.mariadb.port }}
-  clusterIP: None
+  type: ClusterIP
 
