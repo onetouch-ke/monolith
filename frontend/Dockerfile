@@ -1,7 +1,7 @@
 # frontend/Dockerfile
 
 # 1단계: Build
-FROM node:18 as builder
+FROM node:18 AS builder
 WORKDIR /app
 COPY . .
 RUN npm install && npm run build
