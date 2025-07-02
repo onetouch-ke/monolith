@@ -60,6 +60,16 @@ jobs:
     - name: Push frontend Docker image
       run: docker push $FRONTEND_IMAGE
 
+    # 마리아DB 이미지 빌드 및 푸시
+    - name: Set mariadb ECR image
+      run: echo "MARIADB_IMAGE=${{ steps.login-ecr.outputs.registry }}/monolith-mariadb:${{ env.TAG }}" >> $GITHUB_ENV
+
+    - name: Build mariadb Docker image
+      run: docker build -t $MARIADB_IMAGE -f mariadb/Dockerfile .
+
+    - name: Push mariadb Docker image
+      run: docker push $MARIADB_IMAGE
+
     # Helm 템플릿 갱신
     - name: Update image tags in Helm templates
       run: |
