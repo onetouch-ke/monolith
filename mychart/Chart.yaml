@@ -1,6 +1,6 @@
 apiVersion: v2
-name: mychart
-description: A sample Helm chart for Spring Boot + MariaDB
+name: 3-tier-chart
+description: A 3-tier application Helm chart
+type: application
 version: 0.1.0
 appVersion: "1.0"
-
