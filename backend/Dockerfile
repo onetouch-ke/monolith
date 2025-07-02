@@ -13,8 +13,8 @@ RUN rm -rf node_modules package-lock.json && \
 FROM maven:3.9.4-eclipse-temurin-17 AS builder
 
 WORKDIR /app
-COPY pom.xml .
-COPY src ./src
+COPY backend/pom.xml .
+COPY backend/src ./src
 
 # React 빌드 결과 복사
 COPY --from=frontend-builder /app/frontend/build ./src/main/resources/static
