@@ -73,8 +73,9 @@ jobs:
     # Helm 템플릿 갱신
     - name: Update image tags in Helm templates
       run: |
-        sed -i "s|image:.*monolith-backend.*|image: $BACKEND_IMAGE|" mychart/templates/springboot-deployment.yaml
+        sed -i "s|image:.*monolith-backend.*|image: $BACKEND_IMAGE|" mychart/templates/backend-deployment.yaml
         sed -i "s|image:.*monolith-frontend.*|image: $FRONTEND_IMAGE|" mychart/templates/frontend-deployment.yaml
+        sed -i "s|image:.*monolith-mariadb.*|image: $MARIADB_IMAGE|" mychart/templates/mariadb-deployment.yaml
         git add mychart/templates/*.yaml
         git commit -m "Auto update image tags to ${{ env.TAG }}" || echo "No changes to commit"
 
@@ -88,7 +89,7 @@ jobs:
       uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        branch: CI/CD-branch
+        branch: CI/CD
         title: Auto update image tags to ${{ env.TAG }}
         body: |
           This PR was automatically created by GitHub Actions.
