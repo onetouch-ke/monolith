@@ -40,42 +40,44 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    # 백엔드 이미지 빌드 및 푸시
-    - name: Set backend ECR image
-      run: echo "BACKEND_IMAGE=${{ steps.login-ecr.outputs.registry }}/monolith-backend:${{ env.TAG }}" >> $GITHUB_ENV
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v44
 
-    - name: Build backend Docker image
-      run: docker build -t $BACKEND_IMAGE -f backend/Dockerfile backend
-
-    - name: Push backend Docker image
-      run: docker push $BACKEND_IMAGE
-
-    # 프론트엔드 이미지 빌드 및 푸시
-    - name: Set frontend ECR image
-      run: echo "FRONTEND_IMAGE=${{ steps.login-ecr.outputs.registry }}/monolith-frontend:${{ env.TAG }}" >> $GITHUB_ENV
-
-    - name: Build frontend Docker image
-      run: docker build -t $FRONTEND_IMAGE -f frontend/Dockerfile frontend
-
-    - name: Push frontend Docker image
-      run: docker push $FRONTEND_IMAGE
-
-    # 마리아DB 이미지 빌드 및 푸시
-    - name: Set mariadb ECR image
-      run: echo "MARIADB_IMAGE=${{ steps.login-ecr.outputs.registry }}/monolith-mariadb:${{ env.TAG }}" >> $GITHUB_ENV
-
-    - name: Build mariadb Docker image
-      run: docker build -t $MARIADB_IMAGE -f DB/Dockerfile DB
-
-    - name: Push mariadb Docker image
-      run: docker push $MARIADB_IMAGE
-
-    # Helm 템플릿 갱신
-    - name: Update image tags in Helm templates
+    # 백엔드 변경 시 빌드 및 푸시
+    - name: Build and Push backend if changed
+      if: contains(steps.changed-files.outputs.all_changed_files, 'backend/')
       run: |
-        sed -i "s|image:.*monolith-backend.*|image: $BACKEND_IMAGE|" mychart/templates/backend-deployment.yaml
-        sed -i "s|image:.*monolith-frontend.*|image: $FRONTEND_IMAGE|" mychart/templates/frontend-deployment.yaml
-        sed -i "s|image:.*monolith-mariadb.*|image: $MARIADB_IMAGE|" mychart/templates/mariadb-deployment.yaml
+        IMAGE=${{ steps.login-ecr.outputs.registry }}/monolith-backend:${{ env.TAG }}
+        docker build -t $IMAGE -f backend/Dockerfile backend
+        docker push $IMAGE
+        echo "BACKEND_IMAGE=$IMAGE" >> $GITHUB_ENV
+
+    # 프론트엔드 변경 시 빌드 및 푸시
+    - name: Build and Push frontend if changed
+      if: contains(steps.changed-files.outputs.all_changed_files, 'frontend/')
+      run: |
+        IMAGE=${{ steps.login-ecr.outputs.registry }}/monolith-frontend:${{ env.TAG }}
+        docker build -t $IMAGE -f frontend/Dockerfile frontend
+        docker push $IMAGE
+        echo "FRONTEND_IMAGE=$IMAGE" >> $GITHUB_ENV
+
+    # 마리아DB 변경 시 빌드 및 푸시
+    - name: Build and Push mariadb if changed
+      if: contains(steps.changed-files.outputs.all_changed_files, 'DB/')
+      run: |
+        IMAGE=${{ steps.login-ecr.outputs.registry }}/monolith-mariadb:${{ env.TAG }}
+        docker build -t $IMAGE -f DB/Dockerfile DB
+        docker push $IMAGE
+        echo "MARIADB_IMAGE=$IMAGE" >> $GITHUB_ENV
+
+    - name: Update Helm templates if any image built
+      run: |
+        echo "📦 Updating Helm templates with new image tags"
+        [[ -n "$BACKEND_IMAGE" ]] && sed -i "s|image:.*monolith-backend.*|image: $BACKEND_IMAGE|" mychart/templates/backend-deployment.yaml
+        [[ -n "$FRONTEND_IMAGE" ]] && sed -i "s|image:.*monolith-frontend.*|image: $FRONTEND_IMAGE|" mychart/templates/frontend-deployment.yaml
+        [[ -n "$MARIADB_IMAGE" ]] && sed -i "s|image:.*monolith-mariadb.*|image: $MARIADB_IMAGE|" mychart/templates/mariadb-deployment.yaml
+
         git add mychart/templates/*.yaml
         git commit -m "Auto update image tags to ${{ env.TAG }}" || echo "No changes to commit"
 
@@ -93,6 +95,6 @@ jobs:
         title: Auto update image tags to ${{ env.TAG }}
         body: |
           This PR was automatically created by GitHub Actions.
-          It updates backend and frontend image tags to `${{ env.TAG }}`.
+          It updates image tags to `${{ env.TAG }}`.
         base: main
         delete-branch: false
