@@ -5,7 +5,7 @@ frontend:
 
 backend:
   image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-backend
-  tag: 24
+  tag: 27
   port: 8080
 
 mariadb:
