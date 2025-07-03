@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-mariadb
+  name: mariadb
 spec:
   replicas: 1
   selector:
@@ -13,13 +13,13 @@ spec:
         app: mariadb
     spec:
       containers:
-        - name: mariadb
-          image: {{ .Values.mariadb.image }}
-          env:
-            - name: MARIADB_ROOT_PASSWORD
-              value: {{ .Values.mariadb.rootPassword }}
-            - name: MARIADB_DATABASE
-              value: {{ .Values.mariadb.database }}
-          ports:
-            - containerPort: {{ .Values.mariadb.port }}
-
+      - name: mariadb
+        image: "{{ .Values.mariadb.image }}:{{ .Values.mariadb.tag }}"
+       #image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-mariadb:22
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "{{ .Values.mariadb.rootPassword }}"
+        ports:
+        - containerPort: {{ .Values.mariadb.port }}
+      imagePullSecrets:
+      - name: ecr-secret
