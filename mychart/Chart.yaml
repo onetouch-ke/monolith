@@ -1,6 +1,5 @@
 apiVersion: v2
-name: 3-tier-chart
-description: A 3-tier application Helm chart
-type: application
+name: multicloud
+description: A Helm chart for 3-tier architecture
 version: 0.1.0
 appVersion: "1.0"
