@@ -1,12 +1,12 @@
 frontend:
 <<<<<<< HEAD
   image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-frontend
-  tag: 22
+  tag: 23
   port: 80
 
 backend:
   image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-backend
-  tag: 22
+  tag: 23
 =======
   image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-backend
   tag: 23
