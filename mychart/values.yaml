@@ -1,5 +1,4 @@
 frontend:
-<<<<<<< HEAD
   image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-frontend
   tag: 23
   port: 80
@@ -7,15 +6,6 @@ frontend:
 backend:
   image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-backend
   tag: 23
-=======
-  image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-backend
-  tag: 23
-  port: 80
-
-backend:
-  image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-frontend
-  tag: 23
->>>>>>> 6d2b5f8b56fc40d297f55ec07131385627ed7b93
   port: 8080
 
 mariadb:
