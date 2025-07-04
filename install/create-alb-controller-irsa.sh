@@ -18,7 +18,7 @@ eksctl utils associate-iam-oidc-provider \
 # 2. Policy 생성 (이미 있으면 에러 무시)
 aws iam create-policy \
   --policy-name $POLICY_NAME \
-  --policy-document file://$POLICY_FILE || true
+  --policy-document file:///root/project/install/$POLICY_FILE || true
 
 # 3. ServiceAccount + IAM Role 연결 (이미 있으면 override)
 eksctl create iamserviceaccount \
