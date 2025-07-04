@@ -4,6 +4,11 @@ metadata:
   name: mariadb
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       app: mariadb
@@ -15,7 +20,7 @@ spec:
       containers:
       - name: mariadb
         image: "{{ .Values.mariadb.image }}:{{ .Values.mariadb.tag }}"
-       #image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-mariadb:22
+        imagePullPolicy: Always
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: "{{ .Values.mariadb.rootPassword }}"
