@@ -1,6 +1,6 @@
 frontend:
   image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-frontend
-  tag: 24
+  tag: 28
   port: 80
 
 backend:
