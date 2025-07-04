@@ -5,12 +5,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class WebController {
+
     @RequestMapping(value = {
-        "/{path:[^\\.]*}",              // 슬래시 + 점 없는 단일 경로
-        "/{path:^(?!api|static).*$}/**" // api, static 제외 모든 서브 경로
+        "/",                     // 루트
+        "/{path:^(?!api|static|favicon\\.ico|.*\\.(js|css|png|json)).*$}", 
+        "/**/{path:^(?!api|static|favicon\\.ico|.*\\.(js|css|png|json)).*$}" 
     })
     public String forward() {
-        System.out.println("Forwarding to index.html");
         return "forward:/index.html";
     }
 }
+
