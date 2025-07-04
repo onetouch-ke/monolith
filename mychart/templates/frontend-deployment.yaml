@@ -15,7 +15,6 @@ spec:
       containers:
       - name: frontend
         image: "{{ .Values.frontend.image }}:{{ .Values.frontend.tag }}"
-          #image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-frontend:22
         ports:
         - containerPort: {{ .Values.frontend.port }}
       imagePullSecrets:
