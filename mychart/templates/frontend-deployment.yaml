@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-frontend
+  name: frontend
 spec:
   replicas: 1
   selector:
@@ -13,8 +13,10 @@ spec:
         app: frontend
     spec:
       containers:
-        - name: frontend
-          image: {{ .Values.frontend.image }}
-          ports:
-            - containerPort: {{ .Values.frontend.port }}
-
+      - name: frontend
+        image: "{{ .Values.frontend.image }}:{{ .Values.frontend.tag }}"
+          #image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-frontend:22
+        ports:
+        - containerPort: {{ .Values.frontend.port }}
+      imagePullSecrets:
+      - name: ecr-secret
