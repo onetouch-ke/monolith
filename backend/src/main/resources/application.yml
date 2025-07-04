@@ -7,6 +7,10 @@ spring:
     #url: jdbc:mariadb://10.10.8.111:3306/mydb #개발용 로컬 DB(EKS올라갈 떄 변경)
     username: root
     password: P@ssw0rd
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER  
+
   jpa:
     hibernate:
       ddl-auto: update
