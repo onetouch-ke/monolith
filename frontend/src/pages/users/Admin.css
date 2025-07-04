@@ -5,9 +5,9 @@ body {
 
 .admin-container {
   width: 100%;
-  max-width: 1000px;
-  min-width: 400px;
-  /* margin: auto; */
+  max-width: 800px;
+  min-width: 500px;
+  margin: auto;
 
   /* 중앙 정렬을 위한 flex 컨테이너 부모 기준 필요 (Layout/main-content 쪽에서 정렬) */
   display: flex;
@@ -21,7 +21,8 @@ body {
   border-radius: 8px;
 
   /* 높이 제한 */
-  max-height: 90vh;
+  max-height: 120vh;
+  min-height: 40vh;
   height: auto;
 }
 

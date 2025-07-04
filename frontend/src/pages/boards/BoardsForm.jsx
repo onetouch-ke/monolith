@@ -32,7 +32,12 @@ function BoardForm() {
             </div>
             <div>
             <label>내용</label>
-            <textarea value={content} onChange={e => setContent(e.target.value)} required />
+            <textarea
+              className="no-resize"
+              value={content}
+              onChange={e => setContent(e.target.value)}
+              required
+            />            
             </div>
             <div>
             <label>작성자 ID (userId)</label>

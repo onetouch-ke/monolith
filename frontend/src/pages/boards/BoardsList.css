@@ -1,9 +1,24 @@
 .board-list-container {
-  max-width: 700px;
-  margin: 80px auto;
+ width: 100%;
+  max-width: 1000px;
+  min-width: 400px;
+  /* margin: auto; */
+
+  /* 중앙 정렬을 위한 flex 컨테이너 부모 기준 필요 (Layout/main-content 쪽에서 정렬) */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   padding: 30px;
   background-color: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border-radius: 8px;
+
+  /* 높이 제한 */
+  max-height: 90vh;
+  min-height: 40vh;
+  height: auto;
 }
 
 .board-list-container h2 {

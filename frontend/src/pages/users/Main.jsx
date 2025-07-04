@@ -12,9 +12,7 @@ function Main() {
     <Layout>
       <div className="main-container">
         <h2>일반 사용자 메인 페이지</h2>
-
-        <img src={logo} alt="Logo" style={{ width: '150px', height: 'auto', margin: '20px 0' }} />
-        
+        <img src={logo} alt="Logo" className="logo-image" />
         <p>사용자 ID: {user?.userId}</p>
         <p>이메일: {user?.email}</p>
       </div>
