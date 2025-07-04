@@ -12,7 +12,7 @@ function BoardForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch('/boards', {
+    fetch('/api/boards', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, content, userId })
