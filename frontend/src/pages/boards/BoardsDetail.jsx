@@ -9,7 +9,7 @@ function BoardDetail() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`/boards/${id}`)
+    fetch(`/api/boards/${id}`)
       .then(res => res.json())
       .then(data => setBoard(data))
       .catch(err => console.error('게시글 조회 실패:', err));

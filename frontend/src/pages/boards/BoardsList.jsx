@@ -7,7 +7,7 @@ function BoardList() {
   const [boards, setBoards] = useState([]);
 
   useEffect(() => {
-    fetch('/boards') // 백엔드 API
+    fetch('/api/boards') // 백엔드 API
       .then(res => res.json())
       .then(data => setBoards(data))
       .catch(err => console.error('게시글 목록 조회 실패:', err));
