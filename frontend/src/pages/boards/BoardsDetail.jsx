@@ -23,7 +23,7 @@ function BoardDetail() {
         <h2>{board.title}</h2>
         <p>{board.content}</p>
         <button onClick={() => {
-            fetch(`/boards/${board.id}`, { method: 'DELETE' })
+            fetch(`/api/boards/${board.id}`, { method: 'DELETE' })
             .then(() => navigate('/boards'))
             .catch(err => console.error('삭제 실패:', err));
             }}>
