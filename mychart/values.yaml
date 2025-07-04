@@ -1,16 +1,16 @@
 frontend:
   image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-frontend
-  tag: 34
+  tag: 37
   port: 80
 
 backend:
   image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-backend
-  tag: 32
+  tag: 37
   port: 8080
 
 mariadb:
   image: 013958955750.dkr.ecr.ap-northeast-2.amazonaws.com/monolith-mariadb
-  tag: 24
+  tag: 37
   port: 3306
   rootPassword: P@ssw0rd
 
