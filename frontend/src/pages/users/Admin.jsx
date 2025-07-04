@@ -10,9 +10,11 @@ function Admin() {
   return (
     <Layout>
     <div className="admin-container">
+      <table>
       <h2>관리자 페이지</h2>
       <p>관리자 ID: {user?.userId}</p>
       <p>이메일: {user?.email}</p>
+      </table>
     </div>
     </Layout>
   );
