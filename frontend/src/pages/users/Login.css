@@ -5,18 +5,31 @@ body {
   padding: 0;
 }
 
-.container {
-  max-width: 400px;
-  margin: 100px auto;
+.login-container {
+  width: 100%;
+  max-width: 800px;
+  min-width: 400px;
+  /* margin: auto; */
+
+  /* 중앙 정렬을 위한 flex 컨테이너 부모 기준 필요 (Layout/main-content 쪽에서 정렬) */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   padding: 30px;
   background-color: #ffffff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
+  border-radius: 8px;
+
+  /* 높이 제한 */
+  max-height: 90vh;
+  height: auto;
 }
 
 input, button {
   width: 100%;
-  padding: 10px;
+  padding: 20vh;
   margin: 10px 0;
   box-sizing: border-box;
 }

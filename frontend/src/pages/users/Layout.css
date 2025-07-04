@@ -1,4 +1,12 @@
-.header, .footer {
+/* Layout.css */
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
   background-color: #222;
   color: white;
   text-align: center;
@@ -6,5 +14,25 @@
 }
 
 .main-content {
-  padding: 20px;
+  flex: 1;
+  display: flex;
+  justify-content: center;  
+  align-items: center;      
+  padding: 0;            
+}
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.footer {
+  background-color: #222;
+  color: white;
+  text-align: center;
+  padding: 12px 0;
+  height: 60px; /* 항상 일정한 높이 유지 */
+  flex-shrink: 0; /* 공간이 작아져도 푸터는 줄어들지 않음 */
 }

@@ -5,12 +5,25 @@ body {
   padding: 0;
 }
 
-.main-content {
-  max-width: 600px;
-  margin: 80px auto;
-  background-color: white;
+.main-container {
+  width: 100%;
+  max-width: 800px;
+  min-width: 500px;
+  margin: auto;
+
+  /* 중앙 정렬을 위한 flex 컨테이너 부모 기준 필요 (Layout/main-content 쪽에서 정렬) */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   padding: 30px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+
+  /* 높이 제한 */
+  max-height: 60vh;
+  height: auto;
   text-align: center;
 }
 
@@ -23,4 +36,14 @@ header, footer {
   color: white;
   text-align: center;
   padding: 10px 0;
+}
+
+.logo-image {
+  width: 40%;
+  max-width: 1000px;
+  min-width: 50px;
+  height: auto;
+  display: block;
+  margin: 20px auto;
+  border: 1px solid #666;
 }
