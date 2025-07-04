@@ -13,6 +13,13 @@ spec:
   rules:
     - http:
         paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-backend
+                port:
+                  number: {{ .Values.backend.port }}
           - path: /
             pathType: Prefix
             backend:
@@ -20,12 +27,5 @@ spec:
                 name: {{ .Release.Name }}-frontend
                 port:
                   number: {{ .Values.frontend.port }}
-          - path: /users
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ .Release.Name }}-backend
-                port:
-                  number: {{ .Values.backend.port }}
 {{- end }}
 

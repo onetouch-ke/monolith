@@ -13,7 +13,7 @@ import com.example.users.service.UserService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
